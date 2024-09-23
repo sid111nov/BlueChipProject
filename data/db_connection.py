@@ -1,4 +1,5 @@
 import mysql.connector as mysql
+from mysql.connector import Error
 import os
 import json
 
@@ -7,17 +8,23 @@ file_path = os.path.join(cwd, "config", "database.json")
 
 
 def get_db_connection():
-    with open(file_path, "r") as f:
-        db_json = json.loads(f.read())
 
-    dbconnection = mysql.connect(
-        host=db_json["host"],
-        user=db_json["username"],
-        password=db_json["password"],
-        database="finance",
-    )
+    try:
 
-    return dbconnection
+
+        with open(file_path, "r") as f:
+            db_json = json.loads(f.read())
+
+        dbconnection = mysql.connect(
+            host=db_json["host"],
+            user=db_json["username"],
+            password=db_json["password"],
+            database="finance",
+        )
+
+        return dbconnection
+    except Error as e:
+        print(e)
 
 
 if __name__ == "__main__":
