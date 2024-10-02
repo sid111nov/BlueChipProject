@@ -17,29 +17,59 @@ with open(file_path,'r') as f:
 print(config_dict["ALPHAV"]) 
 
 fd  = FundamentalData(key=config_dict["ALPHAV"],output_format='pandas')
-income_connection = getconnection2collection("stockdata","income_statement")
+# income_connection = getconnection2collection("stockdata","income_statement")
+
+# balance_connection = getconnection2collection("stockdata","balancesheet_av")
+cashflow_connection = getconnection2collection("stockdata","cashflow_av")
 
 for djia in DJIA_LIST:
     ticker_list.append(djia[0])
 try: 
 
     for ticker in ticker_list:
-        print(f"starting {ticker}")
+        
         income_json = None
-        income_stmt,_ = fd.get_income_statement_annual(symbol=ticker)
-        result = income_connection.find_one({"ticker":ticker})
+        
+        # result = income_connection.find_one({"ticker":ticker})
+        result = cashflow_connection.find_one({"ticker":ticker})
 
+        ## income code 
+        # if result is None:
+        #     income_stmt,_ = fd.get_income_statement_annual(symbol=ticker)
+        #     income_stmt = income_stmt.to_json(orient="records")
+        #     income_connection.insert_one({
+        #         "ticker": ticker,
+        #         "income_stmt": income_stmt
+        #     })
+        # else:
+        #     income_json = result["income_stmt"]
+
+        ## balance sheet code 
+        # if result is None:
+        #     bs_stmt,_ = fd.get_balance_sheet_annual(symbol=ticker)
+        #     bs_stmt = bs_stmt.to_json(orient="records")
+        #     balance_connection.insert_one({
+        #         "ticker": ticker,
+        #         "balance_sheet": bs_stmt
+        #     })
+        # else:
+        #     income_json = result["balance_sheet"]
+
+        ## cashflow code
         if result is None:
-            income_stmt = income_stmt.to_json(orient="records")
-            income_connection.insert_one({
+            print(f"starting {ticker}")
+            cf_stmt,_ = fd.get_cash_flow_annual(symbol=ticker)
+            cf_stmt = cf_stmt.to_json(orient="records")
+            cashflow_connection.insert_one({
                 "ticker": ticker,
-                "income_stmt": income_stmt
+                "cashflow": cf_stmt
             })
         else:
-            income_json = result["income_stmt"]
+            income_json = result["cashflow"]
 
         time.sleep(random.uniform(6,10))
 except Exception as e:
     print(e)        
 finally:
-    income_connection.client.close()
+    # income_connection.client.close()
+    cashflow_connection.client.close()

@@ -8,7 +8,7 @@ from db_connection import get_db_connection
 
 
 
-ticker_list = ['^IXIC','^DJI']
+ticker_list = ['CSCO']
 mongo_connection = getconnection2collection("stockdata","tickers")
 db_connection = get_db_connection()
 cursor = db_connection.cursor()
@@ -45,25 +45,25 @@ try:
               
               
         
-        hist_10y.insert(0,"ticker",ticker)
-        for i in hist_10y.itertuples(index=False):
+        # hist_10y.insert(0,"ticker",ticker)
+        # for i in hist_10y.itertuples(index=False):
                 
-                ticker, date, open_price, high_price, low_price, close_price, volume, dividends, stock_splits = i
-                date = date.strftime("%Y-%m-%d")
-                tuple_list.append((
-                     ticker,
-                    date,
-                    open_price,
-                    high_price,
-                    low_price,
-                    close_price,
-                    volume,
-                    dividends,
-                    stock_splits
-                     ))
+        #         ticker, date, open_price, high_price, low_price, close_price, volume, dividends, stock_splits = i
+        #         date = date.strftime("%Y-%m-%d")
+        #         tuple_list.append((
+        #              ticker,
+        #             date,
+        #             open_price,
+        #             high_price,
+        #             low_price,
+        #             close_price,
+        #             volume,
+        #             dividends,
+        #             stock_splits
+        #              ))
                
-        cursor.executemany(QUERY,tuple_list)
-        db_connection.commit()
+        # cursor.executemany(QUERY,tuple_list)
+        # db_connection.commit()
         time.sleep(random.uniform(5,10))
 except Exception as e:
      print("error thrown ",e)        
