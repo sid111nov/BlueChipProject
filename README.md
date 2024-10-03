@@ -1,2 +1,2 @@
 # BlueChipProject
-Predicting Blue Chip Stock prices
+Predicting McDonalds Stock prices for 7 Days and 30 days
