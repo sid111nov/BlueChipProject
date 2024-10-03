@@ -75,5 +75,7 @@ def getAggregateDataFrame():
 
     mcd_copy = pd.merge(mcd_copy,ixic_copy,on='Date')
     mcd_copy = pd.merge(mcd_copy,dji_copy,on='Date')
-    mcd_copy.rename(columns={'Close_X':'MCD_Share_Price_Close','Volume':'Volume_Traded','Close_y':'NASDAQ_Composite','Close':'Dow_Jones_Ind_Avg'},inplace=True)
+    mcd_copy.rename(columns={'Close_x':'MCD_Share_Price_Close','Volume':'Volume_Traded','Close_y':'NASDAQ_Composite','Close':'Dow_Jones_Ind_Avg'},inplace=True)
+    mcd_copy['Date'] = pd.to_datetime(mcd_copy['Date'])
+    mcd_copy['Date'] = mcd_copy['Date'].dt.strftime('%Y-%m-%d')
     return mcd_copy
